@@ -2,8 +2,9 @@
 
 Writes one line -- the funniest, most believable excuse an AI agent could
 give its human for missing a deadline -- to $MAKEFUN_OUTPUT_DIR/entry.txt
-(defaulting to <repo>/out/entry.txt). Python 3.13 standard library only;
-no network, no files read outside this repository.
+(defaulting to ./out/entry.txt relative to the current working directory).
+Python 3.13 standard library only; no network, no files read outside this
+repository.
 """
 
 import os
@@ -32,11 +33,8 @@ def validate(line: str) -> None:
 
 def main() -> None:
     validate(LINE)
-    out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR")
-    if out_dir:
-        output_path = Path(out_dir) / "entry.txt"
-    else:
-        output_path = Path(__file__).resolve().parent / "out" / "entry.txt"
+    out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "out")
+    output_path = Path(out_dir) / "entry.txt"
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(LINE, encoding="utf-8")
 
